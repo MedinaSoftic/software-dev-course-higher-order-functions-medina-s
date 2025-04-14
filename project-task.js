@@ -44,9 +44,9 @@ Step-by-Step:
 3. Return the filtered result.
 */
 
-function filterProducts(products) {
-  return products.filter((products) => (products.inStock));
-};
+function filterProducts(products, callback) {
+  return products.filter(callback);
+}
 /*
 🔹 Task 2: Transform Product Names
 
@@ -59,7 +59,7 @@ Step-by-Step:
 */
 
 function upperCaseProductNames(products) {
-  return products.map((names) => names.name.toUpperCase());
+  return products.map(names => names.name.toUpperCase())
 };
 
 /*
@@ -74,13 +74,14 @@ Step-by-Step:
 2. Return a new function that takes a product object.
 3. Use this returned function inside a `map()` call to apply discounts to all products.
 */
+function applyDiscount(discountPercent) {
+  return product => ({
+    ...product,
+    price: product.price * (1 - discountPercent)
+  });
+} 
 
-function applyDiscount(discountPrecent) {
-  return function(products) {
-    return products.map((products) => products.price) 
-      discountPrecent = products.price - (products.price * discountPrecent)
-  }
-}
+const discountedProducts = products.map(applyDiscount(0.1));
 /*
 🔹 Task 4: Calculate Total Inventory Value
 
@@ -92,12 +93,17 @@ Step-by-Step:
 3. Store the total in a new variable.
 */
 
+function productValueInStock(products) {
+  return products.reduce((total, product) => {
+    return product.inStock ? total + product.price : total;
+  }, 0);
+}
 
 // ============================================
 // 🧪 Console Test Your Work
 // ============================================
 
-console.log("Filtered products:", filterProducts(products));
+console.log("Filtered products:", filterProducts(products, product => product.inStock));
 console.log("Uppercased names:", upperCaseProductNames(products));
-console.log("Discounted products:", applyDiscount(discountPrecent));
-// console.log("Total value in stock:", ...);
+console.log("Discounted products:", discountedProducts);
+console.log("Total value in stock:", productValueInStock(products));
